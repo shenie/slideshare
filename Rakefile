@@ -9,9 +9,9 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "slideshare"
     gem.summary = %Q{Ruby interface for SlideShare API}
-    gem.email = "andy@shenie.info"
-    gem.homepage = "http://github.com/shenie/slideshare"
-    gem.authors = ["Saiku.es", "Russell Norris", "Andy Shen"]
+    gem.email = "pablo@teambox.com"
+    gem.homepage = "http://github.com/michokest/slideshare"
+    gem.authors = ["Pablo Villalba", "Russell Norris", "Andy Shen"]
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
     gem.add_dependency('httparty', '>= 0.4.3')
     gem.add_dependency('curb', '>= 0.1.4')
