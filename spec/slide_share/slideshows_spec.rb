@@ -3,9 +3,11 @@ require File.dirname(__FILE__) + "/../spec_helper"
 describe SlideShare::Slideshows do
   before(:all) do
     @slideshare = SlideShare::Base.new(spec_fixture("config.yml"))
-    @now = Time.now
-    Time.stub!(:now).and_return(@now)
+		Timecop.freeze
   end
+	after do
+		Timecop.return
+	end
   
   describe "when creating a slideshow" do
     before(:each) do
@@ -15,10 +17,6 @@ describe SlideShare::Slideshows do
       @curl.stub!(:http_post)
       @curl.stub!(:body_str).and_return(File.read(spec_fixture("upload_slideshow.xml")))
     end
-    
-    # it "should generate the proper API call" do
-    #   @slideshare.slideshows.create "A Title", @upload, "user", "pass"
-    # end
     
     it "should return the uploaded slideshow's id when successful" do
       @slideshare.slideshows.create("A Title", @upload, "user", "pass").should == 815
@@ -39,13 +37,13 @@ describe SlideShare::Slideshows do
     
     it "should generate the proper API call" do
       SlideShare::Base.should_receive(:get).with("/get_slideshow",
-        :query => add_required_params(@slideshare, :slideshow_id => 815)).and_return(@response)
+        :query => add_required_params(@slideshare, :slideshow_id => 815))
       @slideshare.slideshows.find(815)
     end
     
     it "should convert boolean argument for detailed slideshow into numeric values" do
       SlideShare::Base.should_receive(:get).with("/get_slideshow",
-        :query => add_required_params(@slideshare, :slideshow_id => 815, :detailed => 1)).and_return(@response)
+        :query => add_required_params(@slideshare, :slideshow_id => 815, :detailed => 1))
       @slideshare.slideshows.find(815, :detailed => true)
     end
     
@@ -85,7 +83,7 @@ describe SlideShare::Slideshows do
     it "should generate the proper API call" do
       SlideShare::Base.should_receive(:post).with("/edit_slideshow",
         :query => add_required_params(@slideshare, :slideshow_id => 815, 
-          :username => "user", :password => "pass")).and_return(@response)
+          :username => "user", :password => "pass"))
       @slideshare.slideshows.update(815, "user", "pass")
     end
     
@@ -93,7 +91,7 @@ describe SlideShare::Slideshows do
       SlideShare::Base.should_receive(:post).with("/edit_slideshow",
         :query => add_required_params(@slideshare, :slideshow_id => 815, 
           :username => "user", :password => "pass",
-          :make_slideshow_private => "Y")).and_return(@response)
+          :make_slideshow_private => "Y"))
       @slideshare.slideshows.update(815, "user", "pass", :make_slideshow_private => true)
     end
     
@@ -125,7 +123,7 @@ describe SlideShare::Slideshows do
     it "should generate the proper API call" do
       SlideShare::Base.should_receive(:post).with("/delete_slideshow",
         :query => add_required_params(@slideshare, :slideshow_id => 815, 
-          :username => "user", :password => "pass")).and_return(@response)
+          :username => "user", :password => "pass"))
       @slideshare.slideshows.delete(815, "user", "pass")
     end
     
