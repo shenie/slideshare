@@ -60,6 +60,7 @@ module SlideShare
     end
     
     def catch_errors(response)
+      return if response.nil?
       if error = response.delete("SlideShareServiceError")
         case error["Message"]
         when /failed user authentication/i
